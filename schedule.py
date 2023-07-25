@@ -52,6 +52,10 @@ class Monitor:
         self.controllerList = []
 
     def addcontroller(self, c):
+        for con in self.controllerList:
+            if c.uid == con.uid:
+                return
+
         self.controllerList.append(c)
         print("Successfully add ")
 

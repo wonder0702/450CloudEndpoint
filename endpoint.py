@@ -1,6 +1,8 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from waitress import serve
 from schedule import Monitor, Controller
 import json
+
 app = Flask(__name__)
 m = Monitor()
 
@@ -32,14 +34,21 @@ def addController():
         c = Controller(l=loadList, uid=uid)
         m.addcontroller(c)
         m.showStatus()
-        return "Successfully Added!"
+        return jsonify({'success': True, 'message': 'Controller created successfully'})
     except:
-        return "Fail to add!"
+        return False
 
 @app.route('/test', methods=['POST'])
 def test():
     return "Siuuu"
 
+@app.route('/status', methods=['GET'])
+def getStatus():
+    res = m.showStatus()
+    return res
+
+
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+    # app.run(debug=True, host="0.0.0.0")
+    serve(app, host='0.0.0.0', port=5000)
